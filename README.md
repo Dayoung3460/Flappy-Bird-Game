@@ -1,1 +1,1 @@
-# Flappy-Bird-Game
+# Jumping Game
