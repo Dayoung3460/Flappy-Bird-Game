@@ -1,16 +1,23 @@
 'use strict';
 
 const grid = document.querySelector(".grid");
-const startBtn = document.querySelector('button');
-grid.appendChild(startBtn);
+const startBtn = document.querySelector(".start-btn");
 
+grid.appendChild(startBtn);
+  
 startBtn.addEventListener("click", () => {
-  startBtn.style.display = 'none';
+  const key = document.querySelector(".arrowKey");
+  const direction = document.querySelector(".direction");
+  const form = document.querySelector("form");
+  const patrick = document.getElementById('character2');
+  const sandyCheeks = document.getElementById('character3');
   const doodler = document.createElement("div");
+  const level = document.querySelector('.level');
+  const lv1 = document.getElementById("lv1");
+  const lv2 = document.getElementById('lv2');
   let doodlerLeftSpace = 50;
   let startPoint = 100;
   let doodlerBottomSpace = startPoint;
-  let platformCount = 5;
   let isGameOver = false;
   let platforms = [];
   let upTimerId;
@@ -21,6 +28,18 @@ startBtn.addEventListener("click", () => {
   let leftTimerId;
   let rightTimerId;
   let score = 0;
+
+  startBtn.style.display = "none";
+  key.style.display = "none";
+  direction.style.display = "none";
+  form.style.display = "none";
+  level.style.display = 'none';
+
+  if (patrick.checked) {
+    doodler.style.backgroundImage = "URL('./img/character2.png')";
+  } else if (sandyCheeks.checked) {
+    doodler.style.backgroundImage = "URL('./img/character3.png')";
+  } 
 
   function createDoodler() {
     grid.appendChild(doodler);
@@ -46,6 +65,7 @@ startBtn.addEventListener("click", () => {
   }
 
   function createFlatforms() {
+    const platformCount = 5;
     let platGap = 600 / platformCount;
 
     for (let i = 0; i < platformCount; i++) {
@@ -59,7 +79,14 @@ startBtn.addEventListener("click", () => {
   function movePlatforms() {
     if (doodlerBottomSpace > 100) {
       platforms.forEach((platform) => {
-        platform.bottom -= 3;
+        if(lv1.checked) {
+          platform.bottom -= 2;
+        } else if(lv2.checked) {
+          platform.bottom -= 4;
+        } else {
+          platform.bottom -= 6;
+        }
+        
         let visual = platform.visual;
         visual.style.bottom = platform.bottom + "px";
 
@@ -79,9 +106,9 @@ startBtn.addEventListener("click", () => {
     clearInterval(downTimerId);
     isJumping = true;
     upTimerId = setInterval(() => {
-      doodlerBottomSpace += 8;
+      doodlerBottomSpace += 10;
       doodler.style.bottom = doodlerBottomSpace + "px";
-      if (doodlerBottomSpace > startPoint + 200) {
+      if (doodlerBottomSpace > startPoint + 250) {
         fall();
       }
     }, 30);
@@ -91,7 +118,14 @@ startBtn.addEventListener("click", () => {
     isJumping = false;
     clearInterval(upTimerId);
     downTimerId = setInterval(() => {
-      doodlerBottomSpace -= 5;
+      if(lv1.checked) {
+        doodlerBottomSpace -= 5;
+      } else if(lv2) {
+        doodlerBottomSpace -= 10;
+      } else {
+        doodlerBottomSpace -= 15;
+      }
+      
       doodler.style.bottom = doodlerBottomSpace + "px";
       if (doodlerBottomSpace <= 0) {
         gameOver();
@@ -118,11 +152,24 @@ startBtn.addEventListener("click", () => {
 
   function gameOver() {
     isGameOver = true;
-    grid.textContent = score;
+    grid.innerHTML = `<h1>GAME OVER</h1>
+                      <h3>Your Score<h1>${score}</h1></h3>
+                      <div class="game-over-btns">
+                        <button class="back-btn">Back</button>
+                      </div>
+                      `;
     clearInterval(upTimerId);
     clearInterval(downTimerId);
     clearInterval(leftTimerId);
     clearInterval(rightTimerId);
+
+    const backBtn = document.querySelector(".back-btn");
+    // var againBtn = document.querySelector('.again-btn')
+    backBtn.addEventListener("click", () => window.location.reload());
+    // againBtn.addEventListener("click", () => {
+    //   isGameOver = false;
+    //   start();
+    // });
   }
 
   function control(e) {
@@ -142,14 +189,16 @@ startBtn.addEventListener("click", () => {
     }
     isGoingLeft = true;
     doodler.style.transform = "rotateY(180deg)";
-    leftTimerId = setInterval(() => {
+
+    function goLeft(){
       if (doodlerLeftSpace >= 0) {
         doodlerLeftSpace -= 2;
         doodler.style.left = doodlerLeftSpace + "px";
       } else {
         moveRight();
-      }
-    }, 10);
+        }
+    }
+    leftTimerId = setInterval(goLeft, 10);
   }
 
   function moveRight() {
@@ -159,15 +208,17 @@ startBtn.addEventListener("click", () => {
     }
     isGoingRight = true;
     doodler.style.transform = "rotateY(0)";
-    rightTimerId = setInterval(() => {
-      // (grid width 400px) - (doodler width 60px)
+
+    function goRight(){
+     // (grid width 400px) - (doodler width 60px)
       if (doodlerLeftSpace <= 340) {
         doodlerLeftSpace += 2;
         doodler.style.left = doodlerLeftSpace + "px";
       } else {
         moveLeft();
       }
-    }, 10);
+    }
+    rightTimerId = setInterval(goRight, 10);
   }
 
   function moveStraight() {

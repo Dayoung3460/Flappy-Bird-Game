@@ -1,19 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  font-family: 'Press Start 2P', cursive;
+}
+
 .grid {
     width: 400px;
     height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-image: url(./img/background.png);
     background-size: contain; 
     background-repeat: no-repeat;
     position: relative;
     overflow: hidden;
-    font-size: 12rem;
-    text-align: center;
+    border-radius: 5px;
 }
 
-button {
-    width: 220px;
-    height: 220px;
-    background-image: url(./img/btn3.png);
+.start-btn {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 60px;
+    background-image: url(./img/start_btn.png);
     background-size: contain; 
     background-repeat: no-repeat;
     background-color: transparent;
@@ -33,15 +44,85 @@ button {
   }
 }
 
-button:hover {
+.start-btn:hover {
     animation: none;
     transform: scale(1.2);
+}
+
+.character,
+.level,
+.direction,
+.arrowKey {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+}
+
+.level label {
+  margin: 0 20px 0 10px;
+}
+
+.level p {
+  margin-right: 10px;
+}
+
+.arrowKey {
+  margin-top: 170px;
+}
+
+.arrowKey div i {
+  font-size: 30px;
+  padding: 5px 25px;
+  color: rgb(22, 22, 145);
+}
+
+.character {
+  width: 350px !important;
+  margin: 300px 25px 0 25px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 0;
+  border-radius: 5px;
+}
+
+.level {
+  width: 350px !important;
+  margin: 250px 25px 0 25px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  color: #fff;
+}
+
+.direction {
+  margin-top: 190px;
+  padding-left: 4px;
+}
+
+.direction span {
+  padding: 25px 7px;
+  text-transform: uppercase;
+  font-size: .5rem;
+}
+
+.character input[type=radio],
+.level input[type=radio] {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+}
+
+.character img {
+  width: 50px;
+  margin: 0 30px 0 5px;
 }
 
 .doodler {
     width: 60px;
     height: 52px;
-    background-image: url(./img/character3.png);
+    background-image: url(./img/character1.png);
     background-size: contain; 
     background-repeat: no-repeat;
     position: absolute;
@@ -53,4 +134,17 @@ button:hover {
     border-radius: 20px;
     border: 3px solid rgb(248, 248, 252);
     position: absolute;
+}
+
+.game-over-btns {
+  width: 400px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 250px;
+}
+
+.back-btn {
+  margin: 10px 25px;
+  padding: 5px 10px;
+  cursor: pointer;
 }
